@@ -12,8 +12,8 @@
 
     <context:component-scan base-package="dogs"/>
     <mvc:annotation-driven/>
-    <bean class="dao.json.impl.DAOJSON" id="dogdao">
-        <constructor-arg name="jsonPath" value="dogs.json"/>
+    <bean class="dao.json.impl.DAOJSON" id="dogdao" scope="singleton">
+        <constructor-arg name="jsonPath" value="szereplok.json"/>
     </bean>
     <bean class="service.implementation.DogServiceImplementation" id="serviceImplementation">
         <constructor-arg name="dao" ref="dogdao"/>
