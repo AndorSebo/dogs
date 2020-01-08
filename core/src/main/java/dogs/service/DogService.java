@@ -14,5 +14,4 @@ public interface DogService {
     public void addNewDog(Dog dog) throws AgeInvalidException, MovingIsTooLate;
     public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate;
     public void deleteDog(UUID id) throws MissingDog;
-
 }

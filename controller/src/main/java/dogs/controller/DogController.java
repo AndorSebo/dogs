@@ -60,6 +60,16 @@ public class DogController {
         return service.getDogById(id);
     }
 
+    @RequestMapping(value="/all/age:[0-9]{2}",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Collection<Dog> getDogsUnderAge(@RequestBody int age){
+        Collection<Dog> dogs = service.listAllDogs();
+        for (Dog d : dogs)
+            if(d.getAge() > age)
+                dogs.remove(d);
+        return dogs;
+    }
+
     @ExceptionHandler(MovingIsTooLate.class)
     @ResponseBody
     public String handlerMovingIsTooLate(Exception e){
