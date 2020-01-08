@@ -8,10 +8,7 @@ import dogs.service.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -61,5 +58,23 @@ public class DogController {
     @ResponseBody
     public Dog getDogById(@RequestBody UUID id) throws MissingDog {
         return service.getDogById(id);
+    }
+
+    @ExceptionHandler(MovingIsTooLate.class)
+    @ResponseBody
+    public String handlerMovingIsTooLate(Exception e){
+        return "The Moving date is invalid, because it's in the future.";
+    }
+
+    @ExceptionHandler(AgeInvalidException.class)
+    @ResponseBody
+    public String handlerAgeInvalidException(Exception e){
+        return "The Age is invalid, because it must be between 0 - 13.";
+    }
+
+    @ExceptionHandler(MissingDog.class)
+    @ResponseBody
+    public String handlerMissingDog(Exception e){
+        return "Dog with this id not found in the system.";
     }
 }
