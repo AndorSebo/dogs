@@ -14,7 +14,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="dao-json" target="1.5" />
+      <module name="dao-json" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
