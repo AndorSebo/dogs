@@ -60,7 +60,7 @@ public class DogController {
         return service.getDogById(id);
     }
 
-    @RequestMapping(value="/all/age:[0-9]{2}",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/all/age:[0-1]{1}[0-9]{1}",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Collection<Dog> getDogsUnderAge(@RequestBody int age){
         Collection<Dog> dogs = service.listAllDogs();
