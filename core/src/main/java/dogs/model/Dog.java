@@ -23,6 +23,10 @@ public class Dog {
         setMoving(moving);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -10,13 +11,14 @@ import dogs.model.Dog;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
 public class DAOJSON implements DogDAO {
 
-    File jsonFile;
-    ObjectMapper mapper;
+    private File jsonFile;
+    private ObjectMapper mapper;
 
     public DAOJSON(File jsonFile) {
         this.jsonFile = jsonFile;
@@ -46,9 +48,10 @@ public class DAOJSON implements DogDAO {
     @Override
     public void createDog(Dog dog) throws AgeInvalidException, MovingIsTooLate {
         Collection<Dog> dogs = listAllDogs();
-        dogs.add(dog);
-        try{
-            mapper.writeValue(jsonFile,dogs);
+        Dog temp = new Dog(dog.getName(),dog.getAge(),dog.getMoving());
+        dogs.add(temp);
+        try {
+            mapper.writeValue(jsonFile, dogs);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,21 +59,47 @@ public class DAOJSON implements DogDAO {
 
     @Override
     public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate {
-
+        Dog temp = getDogById(dog.getId());
+        removeDog(temp.getId());
+        temp.setAge(dog.getAge());
+        temp.setMoving(dog.getMoving());
+        temp.setName(dog.getName());
+        createDog(temp);
     }
 
     @Override
     public void removeDog(UUID id) throws MissingDog {
+        Dog temp = getDogById(id);
+        Collection<Dog> dogs = listAllDogs();
+        dogs.remove(temp);
+        try {
+            mapper.writeValue(jsonFile, dogs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public Dog getDogById(UUID id) throws MissingDog {
-        return null;
+        Collection<Dog> dogs = listAllDogs();
+        for (Dog d : dogs) {
+            if (id.equals(d.getId())) {
+                return d;
+            }
+        }
+        throw new MissingDog("This Dog is not found in the system.");
     }
 
     @Override
     public Collection<Dog> listAllDogs() {
-        return null;
+        Collection<Dog> dogs = new ArrayList<>();
+        try {
+            dogs = mapper.readValue(jsonFile, new TypeReference<ArrayList<Dog>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dogs;
     }
 }
