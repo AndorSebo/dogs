@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dao.DogDAO;
 import dogs.exceptions.AgeInvalidException;
+import dogs.exceptions.InvalidDogSize;
 import dogs.exceptions.MissingDog;
 import dogs.exceptions.MovingIsTooLate;
 import dogs.model.Dog;
@@ -57,9 +58,9 @@ public class DAOJSON implements DogDAO {
         mapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
     }
 
-    public void createDog(Dog dog) throws AgeInvalidException, MovingIsTooLate {
+    public void createDog(Dog dog) throws AgeInvalidException, MovingIsTooLate, InvalidDogSize {
         Collection<Dog> dogs = listAllDogs();
-        Dog temp = new Dog(dog.getName(), dog.getAge(), dog.getMoving());
+        Dog temp = new Dog(dog.getName(), dog.getAge(), dog.getMoving(), dog.getDogSize());
         dogs.add(temp);
         try {
             mapper.writeValue(jsonFile, dogs);
@@ -68,13 +69,14 @@ public class DAOJSON implements DogDAO {
         }
     }
 
-    public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate {
+    public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate, InvalidDogSize {
         Dog temp = getDogById(dog.getId());
         Collection<Dog> dogs = listAllDogs();
-        for (int i=0; i<dogs.size(); i++){
-            Dog d = (Dog)((dogs.toArray())[i]);
-            if(d.getId().equals(temp.getId())){
+        for (int i = 0; i < dogs.size(); i++) {
+            Dog d = (Dog) ((dogs.toArray())[i]);
+            if (d.getId().equals(temp.getId())) {
                 d.setName(dog.getName());
+                d.setDogSize(dog.getDogSize());
                 d.setAge(dog.getAge());
                 d.setMoving(dog.getMoving());
             }
@@ -85,19 +87,23 @@ public class DAOJSON implements DogDAO {
             e.printStackTrace();
         }
     }
+
     public void removeDog(UUID id) throws MissingDog {
         Dog temp = getDogById(id);
         Collection<Dog> dogs = listAllDogs();
-        ArrayList<Dog> dogsList = new ArrayList<>(dogs);
-        for(Dog d : dogsList)
-            if(d.getId().equals(temp.getId()))
-                dogsList.remove(d);
+        Collection<Dog> result = new ArrayList<>();
+        for (Dog d : dogs){
+            if(!(d.getId().equals(temp.getId())))
+                result.add(d);
+        }
+        System.out.println("List size: "+result.size());
         try {
-            mapper.writeValue(jsonFile, dogsList);
+            mapper.writeValue(jsonFile, result);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public Dog getDogById(UUID id) throws MissingDog {
         Collection<Dog> dogs = listAllDogs();
         System.out.println("Get id:" + id);

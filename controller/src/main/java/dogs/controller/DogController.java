@@ -1,6 +1,7 @@
 package dogs.controller;
 
 import dogs.exceptions.AgeInvalidException;
+import dogs.exceptions.InvalidDogSize;
 import dogs.exceptions.MissingDog;
 import dogs.exceptions.MovingIsTooLate;
 import dogs.model.Dog;
@@ -35,7 +36,7 @@ public class DogController {
 
     @RequestMapping(value="/add",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String addDog(@RequestBody Dog dog) throws MovingIsTooLate, AgeInvalidException {
+    public String addDog(@RequestBody Dog dog) throws MovingIsTooLate, AgeInvalidException, InvalidDogSize {
         service.addNewDog(dog);
         return dog.getName()+" has added to database with id: "+dog.getId()+".";
     }
@@ -49,7 +50,7 @@ public class DogController {
 
     @RequestMapping(value="/update",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String updateDog(@RequestBody Dog dog) throws MovingIsTooLate, MissingDog, AgeInvalidException {
+    public String updateDog(@RequestBody Dog dog) throws MovingIsTooLate, MissingDog, AgeInvalidException, InvalidDogSize {
         service.updateDog(dog);
         return dog.getName()+" data's has updated.";
     }

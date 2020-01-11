@@ -2,6 +2,7 @@ package service.impl;
 
 import dao.DogDAO;
 import dogs.exceptions.AgeInvalidException;
+import dogs.exceptions.InvalidDogSize;
 import dogs.exceptions.MissingDog;
 import dogs.exceptions.MovingIsTooLate;
 import dogs.model.Dog;
@@ -26,11 +27,11 @@ public class DogServiceImplementation implements DogService {
         return dao.getDogById(id);
     }
 
-    public void addNewDog(Dog dog) throws AgeInvalidException, MovingIsTooLate {
+    public void addNewDog(Dog dog) throws AgeInvalidException, MovingIsTooLate, InvalidDogSize {
         dao.createDog(dog);
     }
 
-    public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate {
+    public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate, InvalidDogSize {
         dao.updateDog(dog);
     }
 
