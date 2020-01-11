@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Controller
 public class DogController {
@@ -39,10 +40,10 @@ public class DogController {
         return dog.getName()+" has added to database with id: "+dog.getId()+".";
     }
 
-    @RequestMapping(value="/delete",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/delete",method = RequestMethod.DELETE)
     @ResponseBody
-    public String deleteDog(@RequestBody String id) throws MissingDog {
-        service.deleteDog(id);
+    public String deleteDog(@RequestParam(required = false) String id) throws MissingDog {
+        service.removeDog(UUID.fromString(id));
         return "The dog with id ("+id+") has been removed.";
     }
 
@@ -50,22 +51,23 @@ public class DogController {
     @ResponseBody
     public String updateDog(@RequestBody Dog dog) throws MovingIsTooLate, MissingDog, AgeInvalidException {
         service.updateDog(dog);
-        return dog.getName()+" data's has updated. New id: "+dog.getId()+".";
+        return dog.getName()+" data's has updated.";
     }
 
-    @RequestMapping(value="/id",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/id",method = RequestMethod.GET)
     @ResponseBody
-    public Dog getDogById(@RequestBody String id) throws MissingDog {
-        return service.getDogById(id);
+    public Dog getDogById(@RequestParam(required = false) String id) throws MissingDog {
+        return service.getDogById(UUID.fromString(id));
     }
 
-    @RequestMapping(value="/age",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/age",method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Dog> getDogsUnderAge(@RequestBody int age){
+    public Collection<Dog> getDogsUnderAge(@RequestParam(required = false) Integer age){
         Collection<Dog> dogs = service.listAllDogs();
-        for (Dog d : dogs)
-            if(d.getAge() > age)
+        for (Dog d : dogs){
+            if(d.getAge() != age)
                 dogs.remove(d);
+        }
         return dogs;
     }
 

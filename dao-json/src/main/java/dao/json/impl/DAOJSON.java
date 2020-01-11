@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 public class DAOJSON implements DogDAO {
 
@@ -68,29 +69,40 @@ public class DAOJSON implements DogDAO {
     }
 
     public void updateDog(Dog dog) throws MissingDog, AgeInvalidException, MovingIsTooLate {
-        Dog temp = getDogById(dog.getId().toString());
-        removeDog(temp.getId().toString());
-        temp.setAge(dog.getAge());
-        temp.setMoving(dog.getMoving());
-        temp.setName(dog.getName());
-        createDog(temp);
-    }
-
-    public void removeDog(String id) throws MissingDog {
-        Dog temp = getDogById(id);
+        Dog temp = getDogById(dog.getId());
         Collection<Dog> dogs = listAllDogs();
-        dogs.remove(temp);
+        for (int i=0; i<dogs.size(); i++){
+            Dog d = (Dog)((dogs.toArray())[i]);
+            if(d.getId().equals(temp.getId())){
+                d.setName(dog.getName());
+                d.setAge(dog.getAge());
+                d.setMoving(dog.getMoving());
+            }
+        }
         try {
             mapper.writeValue(jsonFile, dogs);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public Dog getDogById(String id) throws MissingDog {
+    public void removeDog(UUID id) throws MissingDog {
+        Dog temp = getDogById(id);
         Collection<Dog> dogs = listAllDogs();
+        ArrayList<Dog> dogsList = new ArrayList<>(dogs);
+        for(Dog d : dogsList)
+            if(d.getId().equals(temp.getId()))
+                dogsList.remove(d);
+        try {
+            mapper.writeValue(jsonFile, dogsList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public Dog getDogById(UUID id) throws MissingDog {
+        Collection<Dog> dogs = listAllDogs();
+        System.out.println("Get id:" + id);
         for (Dog d : dogs) {
-            if (id.equals(d.getId().toString())) {
+            if (id.equals(d.getId())) {
                 return d;
             }
         }

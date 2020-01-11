@@ -13,9 +13,9 @@
 <body>
     <h1>Available commands: </h1>
     <ul>/add</ul>
+    <ul>/age</ul>
     <ul>/all</ul>
     <ul>/count</ul>
-    <ul>/delete</ul>
     <ul>/delete</ul>
     <ul>/id</ul>
     <ul>/update</ul>

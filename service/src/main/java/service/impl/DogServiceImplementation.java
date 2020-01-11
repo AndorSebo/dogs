@@ -8,6 +8,7 @@ import dogs.model.Dog;
 import dogs.service.DogService;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public class DogServiceImplementation implements DogService {
 
@@ -21,7 +22,7 @@ public class DogServiceImplementation implements DogService {
         return dao.listAllDogs();
     }
 
-    public Dog getDogById(String id) throws MissingDog {
+    public Dog getDogById(UUID id) throws MissingDog {
         return dao.getDogById(id);
     }
 
@@ -33,7 +34,7 @@ public class DogServiceImplementation implements DogService {
         dao.updateDog(dog);
     }
 
-    public void deleteDog(String id) throws MissingDog {
+    public void removeDog(UUID id) throws MissingDog {
         dao.removeDog(id);
     }
 

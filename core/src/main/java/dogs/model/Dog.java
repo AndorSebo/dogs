@@ -9,14 +9,14 @@ import java.util.UUID;
 public class Dog {
     private UUID id;
     private String name;
-    private byte age;
+    private int age;
     private LocalDate moving;
 
     public Dog() {
         this.id = UUID.randomUUID();
     }
 
-    public Dog(String name, byte age, LocalDate moving) throws MovingIsTooLate, AgeInvalidException {
+    public Dog(String name, int age, LocalDate moving) throws MovingIsTooLate, AgeInvalidException {
         this.id = UUID.randomUUID();
         this.name = name;
         setAge(age);
@@ -35,11 +35,11 @@ public class Dog {
         this.name = name;
     }
 
-    public byte getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(byte age) throws AgeInvalidException {
+    public void setAge(int age) throws AgeInvalidException {
         if(age < 0 || age > 13)
             throw new AgeInvalidException("This dog's age is invalid");
         else

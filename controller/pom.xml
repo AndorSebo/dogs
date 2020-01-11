@@ -24,7 +24,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>keretrendszercsutortok</groupId>
+            <groupId>hu.andorsebo.dogregistry</groupId>
             <artifactId>core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
