@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @Controller
 public class DogController {
@@ -42,7 +41,7 @@ public class DogController {
 
     @RequestMapping(value="/delete",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String deleteDog(@RequestBody UUID id) throws MissingDog {
+    public String deleteDog(@RequestBody String id) throws MissingDog {
         service.deleteDog(id);
         return "The dog with id ("+id+") has been removed.";
     }
@@ -56,11 +55,11 @@ public class DogController {
 
     @RequestMapping(value="/id",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Dog getDogById(@RequestBody UUID id) throws MissingDog {
+    public Dog getDogById(@RequestBody String id) throws MissingDog {
         return service.getDogById(id);
     }
 
-    @RequestMapping(value="/all/age:[0-1]{1}[0-9]{1}",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/age",method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Collection<Dog> getDogsUnderAge(@RequestBody int age){
         Collection<Dog> dogs = service.listAllDogs();
@@ -87,4 +86,5 @@ public class DogController {
     public String handlerMissingDog(Exception e){
         return "Dog with this id not found in the system.";
     }
+
 }

@@ -56,4 +56,5 @@ public class Dog {
         else
             this.moving = moving;
     }
+
 }
