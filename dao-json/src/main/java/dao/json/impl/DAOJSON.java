@@ -60,10 +60,12 @@ public class DAOJSON implements DogDAO {
 
     public void createDog(Dog dog) throws AgeInvalidException, MovingIsTooLate, InvalidDogSize {
         Collection<Dog> dogs = listAllDogs();
-        Dog temp = new Dog(dog.getName(), dog.getAge(), dog.getMoving(), dog.getDogSize());
-        dogs.add(temp);
         try {
+            Dog temp = new Dog(dog.getName(), dog.getAge(), dog.getMoving(), dog.getDogSize());
+            dogs.add(temp);
             mapper.writeValue(jsonFile, dogs);
+        }catch (AgeInvalidException | MovingIsTooLate | InvalidDogSize e){
+            throw e;
         } catch (IOException e) {
             e.printStackTrace();
         }

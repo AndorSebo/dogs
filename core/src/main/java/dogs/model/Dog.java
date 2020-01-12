@@ -35,7 +35,7 @@ public class Dog {
     public void setDogSize(size dogSize) throws InvalidDogSize {
         if (!contains(dogSize.toString()))
             throw new InvalidDogSize("Invalid Dog size! Valid parameters:{SMALL, MEDIUM, LARGE, EXTRA_LARGE}");
-        else{
+        else {
             this.dogSize = size.valueOf(dogSize.toString());
         }
     }
@@ -57,9 +57,13 @@ public class Dog {
     }
 
     public void setAge(int age) throws AgeInvalidException {
-        if (age < 0 || age > 13)
-            throw new AgeInvalidException("This dog's age is invalid");
-        else
+        if (age < 1 || age > 13) {
+            try {
+                throw new AgeInvalidException("This Age is invalid.");
+            } catch (AgeInvalidException e) {
+                throw e;
+            }
+        }else
             this.age = age;
     }
 
@@ -80,7 +84,6 @@ public class Dog {
                 return true;
             }
         }
-
         return false;
     }
 
